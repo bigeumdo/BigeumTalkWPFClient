@@ -1,0 +1,53 @@
+﻿<Page x:Class="BigeumTalkClient.Pages.LoginPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:BigeumTalkClient.Pages"
+      mc:Ignorable="d"
+      Title="비금톡 로그인"
+      FontFamily="NanumSquareOTF">
+  <Page.Resources>
+    <ResourceDictionary Source="/Resources/Styles.xaml" />
+  </Page.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="100" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0">
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Stretch" HorizontalAlignment="Center">
+        <TextBlock Style="{StaticResource Header}" HorizontalAlignment="Center" Height="34"
+                   TextWrapping="Wrap" VerticalAlignment="Stretch">
+            <Run Language="ko-kr" Text="비금톡" Foreground="{StaticResource PrimaryHueLightBrush}" />
+          </TextBlock>
+          <materialDesign:PackIcon Kind="MessageAlert" Height="30" Width="30"
+                                   Foreground="{StaticResource PrimaryHueDarkBrush}" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,20" />
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="*" />
+        <RowDefinition Height="*" />
+      </Grid.RowDefinitions>
+      <TextBox Grid.Row="0" x:Name="NicknameText"
+               MaxLength="20"
+               materialDesign:HintAssist.HelperTextFontSize="16"
+               materialDesign:HintAssist.Hint="닉네임"
+               KeyDown="NicknameText_KeyDown"
+               TextChanged="IdTextBox_TextChanged" Width="230" Margin="0,0,0,50" Height="35" FontSize="20"
+               IsEnabled="False" VerticalAlignment="Center" HorizontalAlignment="Center" />
+      <TextBlock Grid.Row="1" x:Name="SigninError" Margin="0,0,0,30" Visibility="Hidden"
+                 HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#FFF34747" FontSize="13" />
+      <Button Grid.Row="2" x:Name="SigninButton" Content="접속"
+              HorizontalAlignment="Center" Height="35" VerticalAlignment="Center" Width="234"
+              FontSize="20" BorderBrush="{x:Null}" Click="SigninButton_Click" Cursor="Hand"
+              Margin="0,0,0,20" IsEnabled="False" />
+    </Grid>
+
+
+  </Grid>
+</Page>
