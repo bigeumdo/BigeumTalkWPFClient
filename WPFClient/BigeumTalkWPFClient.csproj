@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+    <Deterministic>false</Deterministic>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <PlatformTarget>x64</PlatformTarget>
+    <BaseOutputPath>../Binary\</BaseOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Recources\**" />
+    <EmbeddedResource Remove="Recources\**" />
+    <None Remove="Recources\**" />
+    <Page Remove="Recources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\NanumSquareR.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Fonts\NanumSquareB.otf" />
+    <Resource Include="Resources\Fonts\NanumSquareR.otf" />
+    <Resource Include="Resources\Fonts\NanumSquareRoundOTFB.otf" />
+    <Resource Include="Resources\Fonts\NotoSansKR-Regular.otf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignThemes" Version="4.8.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>
