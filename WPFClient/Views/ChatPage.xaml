@@ -1,0 +1,230 @@
+﻿<Page x:Class="BigeumTalkClient.Pages.ChatPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:BigeumTalkClient.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      Title="ChatPage"
+      FontFamily="NanumSquareOTF">
+  <Page.Resources>
+    <ResourceDictionary Source="/Resources/Styles.xaml" />
+  </Page.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="50" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- 상단 영역-->
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <!-- 좌측 상단 영역 -->
+      <StackPanel Grid.Column="0" Height="50" VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch"
+                  Orientation="Horizontal">
+        <TextBlock x:Name="RoomNameBlock" Margin="10,0,0,0" FontSize="20"
+                   Foreground="{StaticResource PrimaryHueMidBrush}" VerticalAlignment="Center" Text="채팅룸"
+                   FontWeight="Bold" />
+      </StackPanel>
+
+      <DockPanel Grid.Column="1" LastChildFill="False">
+        <TextBlock x:Name="UserNickname" DockPanel.Dock="Right" Foreground="{StaticResource PrimaryHueMidBrush}"
+                   Text="NickName"
+                   VerticalAlignment="Center" FontSize="20" Margin="0,0,20,0" FontWeight="Bold" />
+        <materialDesign:PackIcon Foreground="{StaticResource PrimaryHueMidBrush}" DockPanel.Dock="Right"
+                                 Kind="AccountCircleOutline" Height="30" Width="30"
+                                 HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,10,0"
+                                 FontWeight="Normal" />
+
+      </DockPanel>
+    </Grid>
+
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="200" />
+      </Grid.ColumnDefinitions>
+      <!-- 좌측 하단 영역 -->
+      <Grid Grid.Column="0">
+        <Grid.RowDefinitions>
+          <RowDefinition MinHeight="400" />
+          <RowDefinition Height="*" MinHeight="70" MaxHeight="140" />
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Margin="4,0,0,0">
+          <!-- 채팅 창 -->
+          <ScrollViewer DockPanel.Dock="Top" x:Name="ChatScroll" VerticalScrollBarVisibility="Auto" Grid.Row="1"
+                        local:AutoScrollBehavior.AutoScroll="True">
+            <ItemsControl x:Name="ChatListView" Padding="10,0,10,0">
+              <ItemsControl.Resources>
+                <!-- 서버 메시지 -->
+                <DataTemplate x:Key="ServerMessage">
+                  <StackPanel>
+                    <!-- 시간 -->
+                    <TextBox IsReadOnly="True" Text="{Binding dateTime, StringFormat='{}{0:h:mm tt}'}"
+                             FontSize="13" BorderThickness="0" Background="Transparent"
+                             VerticalAlignment="Center" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                             HorizontalAlignment="Stretch" Foreground="Gray" TextWrapping="Wrap"
+                             HorizontalContentAlignment="Center" />
+                    <!-- 메시지 -->
+                    <TextBox IsReadOnly="True" Text="{Binding message}" FontSize="13" VerticalAlignment="Center"
+                             HorizontalAlignment="Stretch" Foreground="Gray" BorderThickness="0" Padding="0"
+                             Background="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                             TextWrapping="Wrap" HorizontalContentAlignment="Center" />
+                  </StackPanel>
+                </DataTemplate>
+
+                <!-- 비연속 -->
+                <DataTemplate x:Key="Discontinuous">
+                  <StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                      <!-- 닉네임 -->
+                      <TextBox IsReadOnly="True" Text="{Binding nickname}" FontWeight="Bold" FontSize="17"
+                               TextWrapping="Wrap" Foreground="{StaticResource PrimaryHueDarkBrush}"
+                               Margin="0,0,10,0" BorderThickness="0" Background="Transparent"
+                               materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+                      <!-- 시간 -->
+                      <TextBox IsReadOnly="True" Text="{Binding dateTime, StringFormat='{}{0:h:mm tt}'}" FontSize="11"
+                               VerticalAlignment="Bottom" Foreground="Gray" BorderThickness="0" TextWrapping="Wrap"
+                               Background="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+                    </StackPanel>
+                    <!-- 메시지 -->
+                    <TextBox IsReadOnly="True" Text="{Binding message}" FontSize="15" BorderThickness="0"
+                             TextWrapping="Wrap"
+                             Background="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+                  </StackPanel>
+                </DataTemplate>
+
+                <!-- 연속 -->
+                <DataTemplate x:Key="Continuous">
+                  <!-- 메시지 -->
+                  <StackPanel>
+                    <TextBox IsReadOnly="True" Text="{Binding message}" FontSize="15" BorderThickness="0"
+                             TextWrapping="Wrap"
+                             Background="Transparent" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" />
+                  </StackPanel>
+                </DataTemplate>
+
+              </ItemsControl.Resources>
+
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <ContentControl Content="{Binding}">
+                    <ContentControl.Style>
+                      <Style TargetType="ContentControl">
+                        <Style.Triggers>
+                          <!-- ** 서버 메시지 ** -->
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding serverMessage}" Value="true" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="ContentTemplate" Value="{StaticResource ServerMessage}" />
+                          </MultiDataTrigger>
+
+                          <!-- ** 비 서버 메시지 ** -->
+                          <!-- 연속 채팅 -->
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding serverMessage}" Value="false" />
+                              <Condition Binding="{Binding continuous}" Value="true" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="ContentTemplate" Value="{StaticResource Continuous}" />
+                          </MultiDataTrigger>
+
+                          <!-- 비 연속 채팅 -->
+                          <MultiDataTrigger>
+                            <MultiDataTrigger.Conditions>
+                              <Condition Binding="{Binding serverMessage}" Value="false" />
+                              <Condition Binding="{Binding continuous}" Value="false" />
+                            </MultiDataTrigger.Conditions>
+                            <Setter Property="ContentTemplate" Value="{StaticResource Discontinuous}" />
+                          </MultiDataTrigger>
+
+                        </Style.Triggers>
+                      </Style>
+                    </ContentControl.Style>
+                  </ContentControl>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+          </ScrollViewer>
+        </Grid>
+
+        <!-- 메시지 박스 -->
+        <Grid Grid.Row="1">
+          <materialDesign:ColorZone
+            MinWidth="400"
+            Padding="5,5,10,5"
+            materialDesign:ElevationAssist.Elevation="Dp4"
+            ClipToBounds="False"
+            CornerRadius="20"
+            Mode="PrimaryLight" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="10,0,10,10">
+            <DockPanel>
+              <Button DockPanel.Dock="Left"
+                      Style="{StaticResource MaterialDesignToolButton}" Cursor="Hand">
+                <materialDesign:PackIcon x:Name="SearchIcon"
+                                         Kind="Send"
+                                         Foreground="White" />
+              </Button>
+              <TextBox x:Name="SendText"
+                       MaxLength="200"
+                       MaxHeight="200"
+                       VerticalAlignment="Stretch"
+                       materialDesign:HintAssist.Hint="메시지 보내기"
+                       materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                       materialDesign:TextFieldAssist.CharacterCounterVisibility="Collapsed"
+                       BorderThickness="0" Padding="4,4,4,4" FontSize="20" CaretBrush="White"
+                       TextWrapping="Wrap" AcceptsReturn="false"
+                       TextChanged="SendText_TextChanged" KeyDown="SendText_KeyDown" />
+
+            </DockPanel>
+          </materialDesign:ColorZone>
+        </Grid>
+
+
+      </Grid>
+
+      <Border Grid.Column="1" BorderThickness="2,0,0,0" BorderBrush="#198532AD">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="20" />
+            <RowDefinition Height="*" />
+          </Grid.RowDefinitions>
+          <!-- 우측 상단 영역 -->
+          <StackPanel Grid.Row="0" Height="20" Orientation="Horizontal" HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch" Margin="10,0,0,0">
+            <TextBlock Margin="0,0,5,0" FontSize="15"
+                       Foreground="{StaticResource PrimaryHueMidBrush}" VerticalAlignment="Center" Text="참여자 -" />
+            <TextBlock x:Name="RoomUsersCountBlock" VerticalAlignment="Center" FontSize="15"
+                       Foreground="{StaticResource PrimaryHueMidBrush}" Text="{Binding Count}" />
+          </StackPanel>
+          <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="1">
+            <ListView x:Name="UserList" Padding="5,10,5,10">
+              <ListView.ItemTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock Text="{Binding nickname}" />
+                  </StackPanel>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </ScrollViewer>
+        </Grid>
+      </Border>
+
+    </Grid>
+
+
+    <!-- 우측 하단 영역 -->
+
+
+  </Grid>
+</Page>
