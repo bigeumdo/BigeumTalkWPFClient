@@ -277,7 +277,7 @@ namespace BigeumTalkClient.Network
         private void Handle_S_OTHER_LEAVE(byte[] buffer, ushort numOfBytes)
         {
             PKT_S_OTHER_LEAVE pkt = Deserialize<PKT_S_OTHER_LEAVE>(buffer, numOfBytes);
-            //ChatPage.chatPage.usersCount--;
+
             Dispatcher(new Action(delegate
             {
                 ChatPage.chatPage.usersList.Remove(ChatPage.chatPage.usersList.Where(i => i.userId == pkt.user.userId).Single());
@@ -376,7 +376,6 @@ namespace BigeumTalkClient.Network
                 ptr = Marshal.AllocHGlobal(size);
                 Marshal.StructureToPtr(obj, ptr, true);
                 Marshal.Copy(ptr, bytes, 0, size);
-                //Marshal.Copy(Encoding.Unicode.GetBytes(body), bytes, 4, size);
             }
             finally
             {
